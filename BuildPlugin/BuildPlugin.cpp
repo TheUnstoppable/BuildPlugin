@@ -16,9 +16,11 @@
 #include "BuildPlugin.h"
 
 void UP_Build_Plugin::Init() {
-	Register_Chat_Command((DAECC)& UP_Build_Plugin::Build_Chat_Command, "!build|!bld|!make", 1, DAAccessLevel::SUPERMODERATOR, DAChatType::ALL);
-	Register_Chat_Command((DAECC)& UP_Build_Plugin::Build_List_Chat_Command, "!buildlist|!bldlist|!makelist", 0, DAAccessLevel::SUPERMODERATOR, DAChatType::ALL);
+	Register_Chat_Command((DAECC)& UP_Build_Plugin::Build_Chat_Command, "!build|!bld|!make", 1, (DAAccessLevel::Level)AccessLevel, DAChatType::ALL);
+	Register_Chat_Command((DAECC)& UP_Build_Plugin::Build_List_Chat_Command, "!buildlist|!bldlist|!makelist", 0, (DAAccessLevel::Level)AccessLevel, DAChatType::ALL);
 	Register_Event(DAEvent::SETTINGSLOADED);
+
+	AccessLevel = 0;
 }
 
 void UP_Build_Plugin::Settings_Loaded_Event() {
@@ -36,6 +38,14 @@ void UP_Build_Plugin::Settings_Loaded_Event() {
 	for (char* Text = Parser.Get_String(); Text; Text = Parser.Get_String()) {
 		BuildsToLook.Add(Text);
 	}
+
+	AccessLevel = DASettingsManager::Get_Int("Build", "AccessLevel", 0);
+
+	Unregister_Chat_Command("!build");
+	Unregister_Chat_Command("!bldlist");
+	Register_Chat_Command((DAECC)& UP_Build_Plugin::Build_Chat_Command, "!build|!bld|!make", 1, (DAAccessLevel::Level)AccessLevel, DAChatType::ALL);
+	Register_Chat_Command((DAECC)& UP_Build_Plugin::Build_List_Chat_Command, "!buildlist|!bldlist|!makelist", 0, (DAAccessLevel::Level)AccessLevel, DAChatType::ALL);
+
 	Iterate(BuildsToLook, a) {
 		StringClass Text = BuildsToLook[a];
 		StringClass AbbrevsTemp;

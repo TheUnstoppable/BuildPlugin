@@ -38,6 +38,7 @@ public:
 	bool Build_List_Chat_Command(cPlayer* Player, const DATokenClass& Text, TextMessageEnum ChatType);
 private:
 	DynamicVectorClass<BuildablePreset*> Presets;
+	int AccessLevel;
 protected:
 	BuildablePreset* Find_Preset_By_Name(StringClass Name) {
 		Iterate(Presets, i) {
