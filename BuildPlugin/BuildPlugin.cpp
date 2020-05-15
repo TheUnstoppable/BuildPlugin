@@ -30,16 +30,16 @@ void UP_Build_Plugin::Settings_Loaded_Event() {
 		DASettingsManager::Add_Settings("Build.ini");
 		Buildcfg = DASettingsManager::Get_Settings("build.ini");
 	}
-	while (!Buildcfg);
-	Reset_List();
+	while (!Buildcfg); //Add setting to settings chain. Freeze server if file not exist.
+	Reset_List(); //Reset the contents of our list if it contains stuff.
 	StringClass BuildList;
 	BuildList = DASettingsManager::Get_String(BuildList, "Build", "Builds", "");
 	DATokenParserClass Parser(BuildList, '|');
-	for (char* Text = Parser.Get_String(); Text; Text = Parser.Get_String()) {
+	for (char* Text = Parser.Get_String(); Text; Text = Parser.Get_String()) { //Parsing the Builds to load.
 		BuildsToLook.Add(Text);
 	}
 
-	AccessLevel = DASettingsManager::Get_Int("Build", "AccessLevel", 0);
+	AccessLevel = DASettingsManager::Get_Int("Build", "AccessLevel", 0); //Re-register commands according to new access level.
 
 	Unregister_Chat_Command("!build");
 	Unregister_Chat_Command("!bldlist");
@@ -98,10 +98,8 @@ bool UP_Build_Plugin::Build_Chat_Command(cPlayer* Player, const DATokenClass& Te
 		Iterate(Preset->Objects, i) { //Iterate the object and spawn them.
 			auto object = Preset->Objects[i];
 			Vector3 Loc(Location.X, Location.Y, Location.Z);
-			Loc += object->OriginOffset;
+			Loc += object->OriginOffset; //Add the offset to our temporary vector.
 			auto obj = Commands->Create_Object(object->Preset, Loc);
-			if (obj) { Commands->Set_Model(obj, object->Model); }
-			else { DA::Page_Player(Player, "UPB > Invalid preset: %s", object->Preset); }
 			if (obj) { 
 				Commands->Set_Model(obj, object->Model); 
 				Commands->Set_Facing(obj, Commands->Get_Facing(obj) + object->FacingOffset);
@@ -124,7 +122,7 @@ bool UP_Build_Plugin::Build_List_Chat_Command(cPlayer* Player, const DATokenClas
 	DA::Page_Player(Player, "UPB > Buildable presets (%d total): ", Presets.Count());
 	StringClass List;
 	Iterate(Presets, i) {
-		auto Preset = Presets[i];
+		auto Preset = Presets[i]; //We're not expecting it to be "nullptr". So not checking, making it crash instead.
 		List += StringFormat("UPB > %s (!build <", Preset->Tag);
 		Iterate(Preset->Abbreviations, a) {
 			List += StringFormat("%s, ", Preset->Abbreviations[a]);
@@ -132,7 +130,7 @@ bool UP_Build_Plugin::Build_List_Chat_Command(cPlayer* Player, const DATokenClas
 		List.TruncateRight(2);
 		List += ">)";
 		DA::Page_Player(Player, List);
-		List.Erase(0, List.Get_Length());
+		List.Erase(0, List.Get_Length()); //Reset the string.
 	}
 	return true;
 }
