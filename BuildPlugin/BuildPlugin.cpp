@@ -102,6 +102,13 @@ bool UP_Build_Plugin::Build_Chat_Command(cPlayer* Player, const DATokenClass& Te
 			auto obj = Commands->Create_Object(object->Preset, Loc);
 			if (obj) { Commands->Set_Model(obj, object->Model); }
 			else { DA::Page_Player(Player, "UPB > Invalid preset: %s", object->Preset); }
+			if (obj) { 
+				Commands->Set_Model(obj, object->Model); 
+				Commands->Set_Facing(obj, Commands->Get_Facing(obj) + object->FacingOffset);
+			}
+			else { 
+				DA::Page_Player(Player, "UPB > Invalid preset: %s", object->Preset); 
+			}
 		}
 		DA::Page_Player(Player, "UPB > You've built %s successfully.", Preset->Tag);
 		return true;
