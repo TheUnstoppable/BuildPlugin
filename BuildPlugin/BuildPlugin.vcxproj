@@ -21,7 +21,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v110_xp</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -98,6 +98,7 @@
       <BaseAddress>0x11000000</BaseAddress>
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalLibraryDirectories>..\bin\debug</AdditionalLibraryDirectories>
+      <MinimumRequiredVersion>6.01</MinimumRequiredVersion>
     </Link>
     <PostBuildEvent>
       <Command>if defined RenPath (
@@ -203,6 +204,9 @@ copy "$(TargetPath)" "%RenServerPath%\$(TargetFileName)"
     <ClInclude Include="General.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Build.ini" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\MemoryManager\MemoryManager.vcxproj">
       <Project>{2fef1c76-9e4a-4921-b2d3-e536da918810}</Project>
     </ProjectReference>
@@ -212,9 +216,6 @@ copy "$(TargetPath)" "%RenServerPath%\$(TargetFileName)"
     <ProjectReference Include="..\shared\shared.vcxproj">
       <Project>{6636e311-e860-4f52-9d23-fe38e38d6020}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Build.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
