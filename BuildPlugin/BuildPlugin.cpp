@@ -135,4 +135,4 @@ bool UP_Build_Plugin::Build_List_Chat_Command(cPlayer* Player, const DATokenClas
 	return true;
 }
 
-Register_Game_Feature(UP_Build_Plugin, "Build Plugin 1.0", "EnableBuilding", 0);
+Register_Game_Feature(UP_Build_Plugin, "Build Plugin 1.1", "EnableBuilding", 0);
